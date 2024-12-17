@@ -1,6 +1,7 @@
 const express = require('express');
 const WebSocket = require('ws');
 const dns = require('dns');
+const axios = require('axios');
 const app = express();
 const port = 3000;
 
@@ -20,11 +21,32 @@ function getHostIP() {
 let activeWs = null;
 let messageBuffer = [];
 
-async function setupWebSocket() {
+async function getChannelIdFromUrl(liveUrl) {
+    try {
+        // Extract the endpoint ID from URL (e.g., get-ready-with-me-241217120921)
+        const endpoint = liveUrl.split('/').pop();
+        
+        // Make a request to the live page
+        const response = await axios.get(liveUrl);
+        
+        // Look for the channel ID in the response
+        // You might need to adjust this based on how the channel ID is embedded in the page
+        const channelIdMatch = response.data.match(/room\/([\w-]+)/);
+        if (channelIdMatch) {
+            return `arn:aws:ivschat:us-east-1:050891932989:room/${channelIdMatch[1]}`;
+        }
+        throw new Error('Channel ID not found in page');
+    } catch (error) {
+        console.error('Failed to get channel ID:', error);
+        throw error;
+    }
+}
+
+async function setupWebSocket(liveUrl) {
     try {
         const ip = await getHostIP();
-        
-        const channelId = "arn:aws:ivschat:us-east-1:050891932989:room/htf3oUJ0sS3i"; // This should be fetched or configured for each stream
+        const channelId = await getChannelIdFromUrl(liveUrl);
+        console.log("Found channel ID:", channelId);
         
         const headers = {
             'accept-language': 'en-US,en;q=0.9',
@@ -156,6 +178,6 @@ app.get('/status', (req, res) => {
 // Memulai server
 app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);
-    // Memulai koneksi WebSocket
-    setupWebSocket();
+    // Memulai koneksi WebSocket dengan URL live
+    setupWebSocket('https://www.idn.app/minerva/live/get-ready-with-me-241217120921');
 });
