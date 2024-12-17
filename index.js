@@ -24,7 +24,6 @@ async function setupWebSocket() {
     try {
         const ip = await getHostIP();
         
-        const wsEndpoint = "get-ready-with-me-241217120921"; // This will be dynamic based on URL
         const channelId = "arn:aws:ivschat:us-east-1:050891932989:room/htf3oUJ0sS3i"; // This should be fetched or configured for each stream
         
         const headers = {
@@ -41,8 +40,8 @@ async function setupWebSocket() {
             'upgrade': 'websocket'
         };
 
-        // WebSocket URL uses the endpoint from the live URL
-        const ws = new WebSocket(`wss://chat.idn.app/${wsEndpoint}`, {
+        // Connect directly to the WebSocket server
+        const ws = new WebSocket(`wss://chat.idn.app`, {
             headers: headers
         });
 
