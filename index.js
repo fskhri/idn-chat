@@ -179,5 +179,5 @@ app.get('/status', (req, res) => {
 app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);
     // Memulai koneksi WebSocket dengan URL live
-    setupWebSocket('https://www.idn.app/minerva/live/get-ready-with-me-241217120921');
+    setupWebSocket('https://www.idn.app/ade.366gib/live/ayo-ngobrol-bareng-241219080019');
 });

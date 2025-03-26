@@ -5,7 +5,7 @@ async function testAuth() {
     console.log('🔄 Starting auth test...');
 
     // Login with credentials
-    const loginResult = await auth.login('email', 'password');
+    const loginResult = await auth.login('dedeg75336@ronete.com', 'j3nPH$^S69#kKZ8');
     console.log('\n📝 Login Result:', {
       success: true,
       hasAccessToken: !!loginResult.AuthenticationResult?.AccessToken,
